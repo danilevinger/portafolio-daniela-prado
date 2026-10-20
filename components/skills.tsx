@@ -1,17 +1,30 @@
 "use client";
 
 import { motion, useReducedMotion } from "motion/react";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, type PointerEvent as ReactPointerEvent } from "react";
 import { skillCategories, skills, type SkillCategory } from "@/data/skills";
 import { IconArrowLeft, IconArrowRight } from "@/components/icons";
 import { SectionHeading } from "@/components/section-heading";
 import { SkillMark } from "@/components/skill-mark";
 
 export function Skills() {
-  const scroller = useRef<HTMLUListElement>(null);
+  const viewport = useRef<HTMLDivElement>(null);
+  const track = useRef<HTMLUListElement>(null);
+  const offset = useRef(0);
   const paused = useRef(false);
   const resumeTimer = useRef(0);
+  const drag = useRef({ active: false, startX: 0, startY: 0, startOffset: 0, decided: false });
   const reduce = useReducedMotion();
+
+  function applyOffset() {
+    const row = track.current;
+    if (!row) return;
+    const half = row.scrollWidth / 2;
+    if (half > 8) {
+      offset.current = ((offset.current % half) + half) % half;
+    }
+    row.style.transform = `translate3d(${-offset.current}px, 0, 0)`;
+  }
 
   useEffect(() => {
     if (reduce !== false) return;
@@ -20,22 +33,19 @@ export function Skills() {
 
     const tick = (now: number) => {
       frame = requestAnimationFrame(tick);
-      const list = scroller.current;
-      if (!list) return;
-      const half = list.scrollWidth / 2;
-      if (half <= 8) return;
-
       if (!paused.current && !document.hidden) {
         const delta = last ? Math.min(now - last, 40) : 16;
-        list.scrollLeft += delta * 0.022;
+        offset.current += delta * 0.022;
       }
       last = now;
-
-      if (list.scrollLeft >= half) list.scrollLeft -= half;
+      applyOffset();
     };
 
     frame = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(frame);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.clearTimeout(resumeTimer.current);
+    };
   }, [reduce]);
 
   function hold() {
@@ -50,22 +60,52 @@ export function Skills() {
     }, 1600);
   }
 
-  function onPointerDown() {
+  function onPointerDown(event: ReactPointerEvent<HTMLDivElement>) {
     hold();
-    function end() {
-      release();
-      window.removeEventListener("pointerup", end);
-      window.removeEventListener("pointercancel", end);
+    drag.current = {
+      active: true,
+      startX: event.clientX,
+      startY: event.clientY,
+      startOffset: offset.current,
+      decided: false,
+    };
+  }
+
+  function onPointerMove(event: ReactPointerEvent<HTMLDivElement>) {
+    const state = drag.current;
+    if (!state.active) return;
+    const dx = event.clientX - state.startX;
+    const dy = event.clientY - state.startY;
+    if (!state.decided) {
+      if (Math.abs(dx) < 8 && Math.abs(dy) < 8) return;
+      state.decided = true;
+      if (Math.abs(dy) > Math.abs(dx)) {
+        state.active = false;
+        release();
+        return;
+      }
+      try {
+        viewport.current?.setPointerCapture(event.pointerId);
+      } catch {
+        // A pointer that already ended cannot be captured.
+      }
     }
-    window.addEventListener("pointerup", end);
-    window.addEventListener("pointercancel", end);
+    offset.current = state.startOffset - dx;
+    applyOffset();
+  }
+
+  function onPointerUp() {
+    if (!drag.current.active && drag.current.decided) return;
+    drag.current.active = false;
+    release();
   }
 
   function move(direction: -1 | 1) {
-    const list = scroller.current;
-    if (!list) return;
+    const row = track.current;
+    if (!row) return;
     hold();
-    list.scrollBy({ left: direction * cardStep(list), behavior: "smooth" });
+    offset.current += direction * cardStep(row);
+    applyOffset();
     release();
   }
 
@@ -96,40 +136,45 @@ export function Skills() {
           ))}
         </ul>
 
-        <div className="@container relative mt-8">
+        <div className="mt-8 flex items-center gap-4">
           <button
             type="button"
             onClick={() => move(-1)}
             onFocus={hold}
             onBlur={release}
-            className="absolute left-0 top-1/2 z-10 hidden h-12 w-12 -translate-y-1/2 items-center justify-center border border-white/25 bg-ink text-paper transition hover:border-signal hover:text-signal md:inline-flex"
+            className="hidden h-12 w-12 shrink-0 items-center justify-center border border-white/25 text-paper transition hover:border-signal hover:text-signal md:inline-flex"
             aria-label="Ver habilidades anteriores"
           >
             <IconArrowLeft className="h-5 w-5" />
           </button>
-          <ul
-            ref={scroller}
-            className="scrollbar-none flex gap-2 overflow-x-auto pb-2 md:scroll-pl-14 md:scroll-pr-14 md:gap-4 md:px-14"
+          <div
+            ref={viewport}
+            className="@container min-w-0 flex-1 overflow-hidden touch-pan-y"
             aria-label="Habilidades técnicas"
             onPointerDown={onPointerDown}
+            onPointerMove={onPointerMove}
+            onPointerUp={onPointerUp}
+            onPointerCancel={onPointerUp}
           >
-            {skills.map((skill) => (
-              <li key={skill.name}>
-                <SkillCard name={skill.name} category={skill.category} reduce={reduce === true} />
-              </li>
-            ))}
-            {skills.map((skill) => (
-              <li key={`${skill.name}-loop`} aria-hidden="true">
-                <SkillCard name={skill.name} category={skill.category} reduce={reduce === true} />
-              </li>
-            ))}
-          </ul>
+            <ul ref={track} className="flex w-max gap-2 will-change-transform md:gap-4">
+              {skills.map((skill) => (
+                <li key={skill.name}>
+                  <SkillCard name={skill.name} category={skill.category} reduce={reduce === true} />
+                </li>
+              ))}
+              {skills.map((skill) => (
+                <li key={`${skill.name}-loop`} aria-hidden="true">
+                  <SkillCard name={skill.name} category={skill.category} reduce={reduce === true} />
+                </li>
+              ))}
+            </ul>
+          </div>
           <button
             type="button"
             onClick={() => move(1)}
             onFocus={hold}
             onBlur={release}
-            className="absolute right-0 top-1/2 z-10 hidden h-12 w-12 -translate-y-1/2 items-center justify-center border border-white/25 bg-ink text-paper transition hover:border-signal hover:text-signal md:inline-flex"
+            className="hidden h-12 w-12 shrink-0 items-center justify-center border border-white/25 text-paper transition hover:border-signal hover:text-signal md:inline-flex"
             aria-label="Ver siguientes habilidades"
           >
             <IconArrowRight className="h-5 w-5" />
@@ -168,10 +213,10 @@ function SkillCard({
   );
 }
 
-function cardStep(list: HTMLUListElement) {
-  const card = list.querySelector("li");
+function cardStep(row: HTMLUListElement) {
+  const card = row.querySelector("li");
   if (!card) return 176;
-  const styles = window.getComputedStyle(list);
+  const styles = window.getComputedStyle(row);
   const gap = Number.parseFloat(styles.columnGap || styles.gap || "16");
   return card.getBoundingClientRect().width + gap;
 }
