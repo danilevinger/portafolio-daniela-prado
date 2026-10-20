@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type MouseEvent } from "react";
 import { navLinks, profile } from "@/data/profile";
 import { IconClose, IconMenu } from "@/components/icons";
 import { Monogram } from "@/components/monogram";
@@ -88,14 +88,26 @@ export function Navbar() {
     };
   }, [open]);
 
-  function closeMenu() {
+  function followSection(event: MouseEvent<HTMLAnchorElement>, id: string) {
+    event.preventDefault();
     setOpen(false);
+    document.body.style.overflow = "";
+    setActive(id);
+    window.requestAnimationFrame(() => {
+      document.getElementById(id)?.scrollIntoView({ behavior: reduce ? "auto" : "smooth" });
+      history.pushState(null, "", `#${id}`);
+    });
   }
 
   return (
     <header className="fixed inset-x-0 top-0 z-40 border-b border-white/10 bg-ink/90 text-paper backdrop-blur-md">
       <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between gap-4 px-5 md:px-8">
-        <a href="#inicio" className="flex items-center gap-3" aria-label="Ir al inicio">
+        <a
+          href="#inicio"
+          onClick={(event) => followSection(event, "inicio")}
+          className="flex items-center gap-3"
+          aria-label="Ir al inicio"
+        >
           <Monogram />
           <span className="hidden font-serif text-lg leading-none sm:inline">{profile.name}</span>
         </a>
@@ -110,7 +122,7 @@ export function Navbar() {
                     <a
                       href={link.href}
                       aria-current={isActive ? "true" : undefined}
-                      className={`relative text-sm transition ${isActive ? "text-signal" : "text-fog hover:text-paper"}`}
+                      className={`relative text-base transition ${isActive ? "text-signal" : "text-fog hover:text-paper"}`}
                     >
                       {link.label}
                       <span
@@ -143,8 +155,8 @@ export function Navbar() {
             ref={panelRef}
             initial={reduce ? false : { opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: reduce ? 0 : -8 }}
-            transition={{ duration: reduce ? 0 : 0.22, ease: [0.22, 1, 0.36, 1] }}
+            exit={{ opacity: 0, transition: { duration: 0 } }}
+            transition={{ duration: reduce || !open ? 0 : 0.22, ease: [0.22, 1, 0.36, 1] }}
             className="border-t border-white/10 bg-ink lg:hidden"
           >
             <nav aria-label="Secciones móviles" className="mx-auto w-full max-w-6xl px-5 py-4">
@@ -153,8 +165,8 @@ export function Navbar() {
                   <li key={link.id}>
                     <a
                       href={link.href}
-                      onClick={closeMenu}
-                      className={`block border-b border-white/10 py-3 font-serif text-3xl ${active === link.id ? "text-signal" : "text-paper"}`}
+                      onClick={(event) => followSection(event, link.id)}
+                      className={`block border-b border-white/10 py-3 font-serif text-[2rem] leading-none ${active === link.id ? "text-signal" : "text-paper"}`}
                     >
                       {link.label}
                     </a>

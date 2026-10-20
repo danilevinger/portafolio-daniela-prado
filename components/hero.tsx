@@ -15,7 +15,7 @@ export function Hero() {
         aria-hidden="true"
         className="pointer-events-none absolute left-1/2 top-[46%] h-[26rem] w-[26rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-pine/40 blur-3xl"
       />
-      <div className="relative mx-auto flex w-full max-w-3xl flex-col items-start px-5 py-16 text-left md:items-center md:px-8 md:py-20 md:text-center">
+      <div className="relative mx-auto flex w-full max-w-3xl flex-col items-center px-5 py-16 text-center md:px-8 md:py-20">
         <h1
           id="inicio-titulo"
           aria-label={`${profile.firstName} ${profile.lastName}`}
@@ -24,12 +24,12 @@ export function Hero() {
           <NameLine text={profile.firstName} delay={0.04} />
           <NameLine text={profile.lastName} delay={0.42} className="italic text-ember" />
         </h1>
-        <span aria-hidden="true" className="name-rule mt-8 block h-px w-16 bg-signal/80" />
+        <span aria-hidden="true" className="name-rule mx-auto mt-8 block h-px w-16 bg-signal/80" />
         <p className="hero-rise d3 mt-6 font-sans text-lg text-paper md:text-xl">{profile.title}</p>
         <p className="hero-rise d4 mt-4 max-w-lg text-base leading-relaxed text-pretty text-fog md:text-lg">
           {profile.summary}
         </p>
-        <div className="hero-rise d5 mt-8 flex flex-col items-start gap-3 sm:flex-row md:items-center">
+        <div className="hero-rise d5 mt-8 flex flex-col items-center gap-3 sm:flex-row">
           <a href="#proyectos" className={`${buttonClass.base} ${buttonClass.signal}`}>
             Ver proyectos
             <IconArrowUpRight />
@@ -38,7 +38,7 @@ export function Hero() {
             Contactarme
           </a>
         </div>
-        <div className="hero-rise d5 mt-8 flex justify-start md:justify-center">
+        <div className="hero-rise d5 mt-8 flex justify-center">
           <SocialLinks />
         </div>
       </div>

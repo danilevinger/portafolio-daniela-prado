@@ -59,7 +59,7 @@ export function Intro() {
   return (
     <motion.div
       id="intro"
-      className={`fixed inset-0 z-50 flex items-center justify-start bg-ink px-6 text-paper md:justify-center md:px-0 ${leaving ? "is-leaving" : ""}`}
+      className={`fixed inset-0 z-50 flex items-center justify-center bg-ink text-paper ${leaving ? "is-leaving" : ""}`}
       initial={false}
       animate={leaving ? { y: "-100%" } : { y: 0 }}
       transition={{ duration: 0.38, ease: [0.76, 0, 0.24, 1] }}
@@ -71,7 +71,7 @@ export function Intro() {
       >
         Omitir
       </button>
-      <div aria-hidden="true" className="w-[min(32rem,calc(100%-3rem))]">
+      <div aria-hidden="true" className="w-[min(32rem,calc(100%-3rem))] text-center">
         <div className="intro-line mb-8 h-px w-full bg-signal" />
         <p className="intro-fade font-mono text-xs uppercase tracking-[0.28em] text-signal">DP</p>
         <p className="intro-fade mt-4 font-serif text-5xl leading-none tracking-tight sm:text-7xl">
