@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useReducedMotion } from "motion/react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { skillCategories, skills, type SkillCategory } from "@/data/skills";
 import { IconArrowLeft, IconArrowRight } from "@/components/icons";
 import { SectionHeading } from "@/components/section-heading";
@@ -9,34 +9,64 @@ import { SkillMark } from "@/components/skill-mark";
 
 export function Skills() {
   const scroller = useRef<HTMLUListElement>(null);
+  const paused = useRef(false);
+  const resumeTimer = useRef(0);
   const reduce = useReducedMotion();
-  const [paused, setPaused] = useState(false);
 
   useEffect(() => {
-    if (reduce !== false || paused) return;
-    const finePointer = window.matchMedia("(pointer: fine)").matches;
-    if (!finePointer) return;
+    if (reduce !== false) return;
+    let frame = 0;
+    let last = 0;
 
-    const timer = window.setInterval(() => {
+    const tick = (now: number) => {
+      frame = requestAnimationFrame(tick);
       const list = scroller.current;
-      if (!list || document.hidden) return;
-      const max = list.scrollWidth - list.clientWidth;
-      if (max <= 8) return;
-      const amount = cardStep(list);
-      if (list.scrollLeft >= max - 8) {
-        list.scrollTo({ left: 0, behavior: "smooth" });
-      } else {
-        list.scrollBy({ left: amount, behavior: "smooth" });
-      }
-    }, 2800);
+      if (!list) return;
+      const half = list.scrollWidth / 2;
+      if (half <= 8) return;
 
-    return () => window.clearInterval(timer);
-  }, [paused, reduce]);
+      if (!paused.current && !document.hidden) {
+        const delta = last ? Math.min(now - last, 40) : 16;
+        list.scrollLeft += delta * 0.022;
+      }
+      last = now;
+
+      if (list.scrollLeft >= half) list.scrollLeft -= half;
+    };
+
+    frame = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(frame);
+  }, [reduce]);
+
+  function hold() {
+    paused.current = true;
+    window.clearTimeout(resumeTimer.current);
+  }
+
+  function release() {
+    window.clearTimeout(resumeTimer.current);
+    resumeTimer.current = window.setTimeout(() => {
+      paused.current = false;
+    }, 1600);
+  }
+
+  function onPointerDown() {
+    hold();
+    function end() {
+      release();
+      window.removeEventListener("pointerup", end);
+      window.removeEventListener("pointercancel", end);
+    }
+    window.addEventListener("pointerup", end);
+    window.addEventListener("pointercancel", end);
+  }
 
   function move(direction: -1 | 1) {
     const list = scroller.current;
     if (!list) return;
+    hold();
     list.scrollBy({ left: direction * cardStep(list), behavior: "smooth" });
+    release();
   }
 
   return (
@@ -44,14 +74,6 @@ export function Skills() {
       id="habilidades"
       aria-labelledby="habilidades-titulo"
       className="scroll-mt-24 bg-ink py-24 text-paper md:py-32"
-      onMouseEnter={() => setPaused(true)}
-      onMouseLeave={() => setPaused(false)}
-      onFocusCapture={() => setPaused(true)}
-      onBlurCapture={(event) => {
-        if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
-          setPaused(false);
-        }
-      }}
     >
       <div className="section-rise mx-auto w-full max-w-6xl px-5 md:px-8">
         <SectionHeading
@@ -78,6 +100,8 @@ export function Skills() {
           <button
             type="button"
             onClick={() => move(-1)}
+            onFocus={hold}
+            onBlur={release}
             className="absolute left-0 top-1/2 z-10 hidden h-12 w-12 -translate-y-1/2 items-center justify-center border border-white/25 bg-ink text-paper transition hover:border-signal hover:text-signal md:inline-flex"
             aria-label="Ver habilidades anteriores"
           >
@@ -85,11 +109,17 @@ export function Skills() {
           </button>
           <ul
             ref={scroller}
-            className="scrollbar-none flex snap-x snap-mandatory gap-2 overflow-x-auto pb-2 md:scroll-pl-14 md:scroll-pr-14 md:gap-4 md:px-14"
+            className="scrollbar-none flex gap-2 overflow-x-auto pb-2 md:scroll-pl-14 md:scroll-pr-14 md:gap-4 md:px-14"
             aria-label="Habilidades técnicas"
+            onPointerDown={onPointerDown}
           >
             {skills.map((skill) => (
-              <li key={skill.name} className="snap-start">
+              <li key={skill.name}>
+                <SkillCard name={skill.name} category={skill.category} reduce={reduce === true} />
+              </li>
+            ))}
+            {skills.map((skill) => (
+              <li key={`${skill.name}-loop`} aria-hidden="true">
                 <SkillCard name={skill.name} category={skill.category} reduce={reduce === true} />
               </li>
             ))}
@@ -97,6 +127,8 @@ export function Skills() {
           <button
             type="button"
             onClick={() => move(1)}
+            onFocus={hold}
+            onBlur={release}
             className="absolute right-0 top-1/2 z-10 hidden h-12 w-12 -translate-y-1/2 items-center justify-center border border-white/25 bg-ink text-paper transition hover:border-signal hover:text-signal md:inline-flex"
             aria-label="Ver siguientes habilidades"
           >
