@@ -74,18 +74,18 @@ export function Skills() {
           ))}
         </ul>
 
-        <div className="mt-8 flex items-center gap-2 sm:gap-3">
+        <div className="@container relative mt-8">
           <button
             type="button"
             onClick={() => move(-1)}
-            className="inline-flex h-11 w-11 shrink-0 items-center justify-center border border-white/20 text-paper transition hover:border-signal hover:text-signal sm:h-12 sm:w-12"
+            className="absolute left-0 top-1/2 z-10 hidden h-12 w-12 -translate-y-1/2 items-center justify-center border border-white/25 bg-ink text-paper transition hover:border-signal hover:text-signal md:inline-flex"
             aria-label="Ver habilidades anteriores"
           >
             <IconArrowLeft className="h-5 w-5" />
           </button>
           <ul
             ref={scroller}
-            className="scrollbar-none flex min-w-0 flex-1 snap-x snap-mandatory gap-4 overflow-x-auto pb-2"
+            className="scrollbar-none flex snap-x snap-mandatory gap-2 overflow-x-auto pb-2 md:scroll-pl-14 md:scroll-pr-14 md:gap-4 md:px-14"
             aria-label="Habilidades técnicas"
           >
             {skills.map((skill) => (
@@ -97,7 +97,7 @@ export function Skills() {
           <button
             type="button"
             onClick={() => move(1)}
-            className="inline-flex h-11 w-11 shrink-0 items-center justify-center border border-white/20 text-paper transition hover:border-signal hover:text-signal sm:h-12 sm:w-12"
+            className="absolute right-0 top-1/2 z-10 hidden h-12 w-12 -translate-y-1/2 items-center justify-center border border-white/25 bg-ink text-paper transition hover:border-signal hover:text-signal md:inline-flex"
             aria-label="Ver siguientes habilidades"
           >
             <IconArrowRight className="h-5 w-5" />
@@ -119,14 +119,18 @@ function SkillCard({
 }) {
   return (
     <motion.article
-      className="group flex h-44 w-40 shrink-0 flex-col justify-between border border-white/10 bg-white/[0.03] p-4 text-fog transition duration-300 hover:border-signal/70 hover:text-signal"
+      className="group flex h-36 w-[calc((100cqw-1rem)/3)] min-w-0 shrink-0 flex-col justify-between border border-white/10 bg-white/[0.03] p-2.5 text-fog transition duration-300 hover:border-signal/70 hover:text-signal sm:h-44 sm:w-40 sm:p-4"
       whileHover={reduce ? undefined : { y: -6 }}
       transition={{ duration: 0.25 }}
     >
-      <SkillMark name={name} />
-      <div>
-        <h3 className="text-base font-medium text-paper">{name}</h3>
-        <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.14em]">{category}</p>
+      <div className="[&_svg]:h-8 [&_svg]:w-8 sm:[&_svg]:h-11 sm:[&_svg]:w-11">
+        <SkillMark name={name} />
+      </div>
+      <div className="min-w-0">
+        <h3 className="text-[13px] font-medium leading-tight text-balance text-paper sm:text-base">{name}</h3>
+        <p className="mt-1 font-mono text-[8px] uppercase leading-tight tracking-normal sm:text-[10px] sm:tracking-[0.14em]">
+          {category}
+        </p>
       </div>
     </motion.article>
   );
