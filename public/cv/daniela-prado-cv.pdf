@@ -1,0 +1,61 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Count 1 /Kids [3 0 R] >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 4 0 R /Resources << /Font << /F1 5 0 R /F2 6 0 R >> >> >>
+endobj
+4 0 obj
+<< /Length 2587 >>
+stream
+0.953 0.937 0.902 rg 0 0 612 792 re f
+0.063 0.078 0.063 rg 0 700 612 92 re f
+0.843 0.937 0.416 rg 48 700 72 4 re f
+1 1 1 rg BT /F2 28 Tf 1 0 0 1 48 748 Tm (Daniela Prado) Tj ET
+0.843 0.937 0.416 rg BT /F1 12 Tf 1 0 0 1 48 724 Tm (Ingeniera en Sistemas Computacionales) Tj ET
+0.369 0.353 0.314 rg BT /F1 9 Tf 1 0 0 1 48 676 Tm (danipradomolina@gmail.com   \267   github.com/danilevinger   \267   linkedin.com/in/danilevinger) Tj ET
+0.604 0.243 0.118 rg BT /F2 11 Tf 1 0 0 1 48 634 Tm (PERFIL) Tj ET
+0.82 0.78 0.72 rg 48 626 516 0.6 re f
+0.063 0.078 0.063 rg BT /F1 10.5 Tf 1 0 0 1 48 608 Tm (Dise\361o y desarrollo software de punta a punta: interfaces claras, servicios estables y datos) Tj ET
+0.063 0.078 0.063 rg BT /F1 10.5 Tf 1 0 0 1 48 592.5 Tm (bien modelados. Me interesa convertir problemas reales en sistemas \372tiles, con criterio) Tj ET
+0.063 0.078 0.063 rg BT /F1 10.5 Tf 1 0 0 1 48 577 Tm (anal\355tico y atenci\363n a la mejora de procesos.) Tj ET
+0.604 0.243 0.118 rg BT /F2 11 Tf 1 0 0 1 48 553.5 Tm (HABILIDADES) Tj ET
+0.82 0.78 0.72 rg 48 545.5 516 0.6 re f
+0.063 0.078 0.063 rg BT /F1 10.5 Tf 1 0 0 1 58 527.5 Tm (?  Frontend: HTML, CSS, JavaScript, TypeScript, React, Next.js y Tailwind CSS.) Tj ET
+0.063 0.078 0.063 rg BT /F1 10.5 Tf 1 0 0 1 58 511.5 Tm (?  Backend: Node.js, Python, C# y .NET.) Tj ET
+0.063 0.078 0.063 rg BT /F1 10.5 Tf 1 0 0 1 58 495.5 Tm (?  Bases de datos: SQL Server.) Tj ET
+0.063 0.078 0.063 rg BT /F1 10.5 Tf 1 0 0 1 58 479.5 Tm (?  Herramientas: Git, GitHub, Postman y Vercel.) Tj ET
+0.604 0.243 0.118 rg BT /F2 11 Tf 1 0 0 1 48 455.5 Tm (FORMACI\323N) Tj ET
+0.82 0.78 0.72 rg 48 447.5 516 0.6 re f
+0.063 0.078 0.063 rg BT /F2 12 Tf 1 0 0 1 48 429.5 Tm (Bachillerato en Ingenier\355a en Sistemas Computacionales) Tj ET
+0.369 0.353 0.314 rg BT /F1 10 Tf 1 0 0 1 48 413.5 Tm (Universidad Latina de Costa Rica  \267  2021\2262025) Tj ET
+0.604 0.243 0.118 rg BT /F2 11 Tf 1 0 0 1 48 383.5 Tm (PROYECTOS) Tj ET
+0.82 0.78 0.72 rg 48 375.5 516 0.6 re f
+0.063 0.078 0.063 rg BT /F1 10.5 Tf 1 0 0 1 58 357.5 Tm (?  Tienda de ropa \227 Share Fashion, tienda en l\355nea para ver prendas y completar una compra.) Tj ET
+0.063 0.078 0.063 rg BT /F1 10.5 Tf 1 0 0 1 58 341.5 Tm (?  Sistema de gesti\363n de inventario \227 Carga de c\363digos y consulta del inventario de productos.) Tj ET
+0.063 0.078 0.063 rg BT /F1 10.5 Tf 1 0 0 1 58 325.5 Tm (?  Control de almuerzos \227 Registro del tiempo de almuerzo y consulta del d\355a.) Tj ET
+0.369 0.353 0.314 rg BT /F1 8 Tf 1 0 0 1 48 36 Tm (Daniela Prado  \267  Ingeniera en Sistemas Computacionales) Tj ET
+endstream
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>
+endobj
+6 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>
+endobj
+xref
+0 7
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000251 00000 n 
+0000002890 00000 n 
+0000002987 00000 n 
+trailer << /Size 7 /Root 1 0 R >>
+startxref
+3089
+%%EOF
