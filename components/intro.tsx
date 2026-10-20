@@ -59,7 +59,7 @@ export function Intro() {
   return (
     <motion.div
       id="intro"
-      className={`fixed inset-0 z-50 flex items-center justify-center bg-ink text-paper ${leaving ? "is-leaving" : ""}`}
+      className={`fixed inset-0 z-50 flex items-center justify-start bg-ink px-6 text-paper md:justify-center md:px-0 ${leaving ? "is-leaving" : ""}`}
       initial={false}
       animate={leaving ? { y: "-100%" } : { y: 0 }}
       transition={{ duration: 0.38, ease: [0.76, 0, 0.24, 1] }}

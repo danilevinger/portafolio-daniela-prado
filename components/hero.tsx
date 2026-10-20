@@ -15,7 +15,7 @@ export function Hero() {
         aria-hidden="true"
         className="pointer-events-none absolute left-1/2 top-[46%] h-[26rem] w-[26rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-pine/40 blur-3xl"
       />
-      <div className="relative mx-auto flex w-full max-w-3xl flex-col items-center px-5 py-16 text-center md:px-8 md:py-20">
+      <div className="relative mx-auto flex w-full max-w-3xl flex-col items-start px-5 py-16 text-left md:items-center md:px-8 md:py-20 md:text-center">
         <h1
           id="inicio-titulo"
           aria-label={`${profile.firstName} ${profile.lastName}`}
@@ -29,7 +29,7 @@ export function Hero() {
         <p className="hero-rise d4 mt-4 max-w-lg text-base leading-relaxed text-pretty text-fog md:text-lg">
           {profile.summary}
         </p>
-        <div className="hero-rise d5 mt-8 flex flex-col items-center gap-3 sm:flex-row">
+        <div className="hero-rise d5 mt-8 flex flex-col items-start gap-3 sm:flex-row md:items-center">
           <a href="#proyectos" className={`${buttonClass.base} ${buttonClass.signal}`}>
             Ver proyectos
             <IconArrowUpRight />
@@ -38,7 +38,7 @@ export function Hero() {
             Contactarme
           </a>
         </div>
-        <div className="hero-rise d5 mt-8 flex justify-center">
+        <div className="hero-rise d5 mt-8 flex justify-start md:justify-center">
           <SocialLinks />
         </div>
       </div>

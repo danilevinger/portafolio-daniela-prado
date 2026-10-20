@@ -14,23 +14,41 @@ export function Navbar() {
   const panelRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const sections = navLinks
-      .map((link) => document.getElementById(link.id))
-      .filter((section): section is HTMLElement => section !== null);
+    let frame = 0;
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visible = entries
-          .filter((entry) => entry.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+    function currentSection() {
+      const atBottom =
+        window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 48;
+      if (atBottom) return navLinks[navLinks.length - 1].id;
 
-        if (visible?.target.id) setActive(visible.target.id);
-      },
-      { rootMargin: "-45% 0px -45% 0px", threshold: [0.1, 0.3, 0.6] },
-    );
+      const probe = Math.min(window.innerHeight * 0.33, 320);
+      let current: string = navLinks[0].id;
+      for (const link of navLinks) {
+        const section = document.getElementById(link.id);
+        if (!section) continue;
+        if (section.getBoundingClientRect().top <= probe) current = link.id;
+      }
+      return current;
+    }
 
-    sections.forEach((section) => observer.observe(section));
-    return () => observer.disconnect();
+    function onScroll() {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        const next = currentSection();
+        setActive((previous) => (previous === next ? previous : next));
+      });
+    }
+
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("scrollend", onScroll);
+    window.addEventListener("resize", onScroll);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("scrollend", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
   }, []);
 
   useEffect(() => {

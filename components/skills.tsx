@@ -54,34 +54,14 @@ export function Skills() {
       }}
     >
       <div className="section-rise mx-auto w-full max-w-6xl px-5 md:px-8">
-        <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
-          <SectionHeading
-            id="habilidades-titulo"
-            index="02"
-            eyebrow="Habilidades"
-            tone="dark"
-            title="Stack de trabajo"
-            description="Frontend, backend, datos, nube y la forma de trabajo con la que llevo un sistema de la idea al despliegue."
-          />
-          <div className="flex gap-2">
-            <button
-              type="button"
-              onClick={() => move(-1)}
-              className="inline-flex h-12 w-12 items-center justify-center border border-white/20 text-paper transition hover:border-signal hover:text-signal"
-              aria-label="Ver habilidades anteriores"
-            >
-              <IconArrowLeft className="h-5 w-5" />
-            </button>
-            <button
-              type="button"
-              onClick={() => move(1)}
-              className="inline-flex h-12 w-12 items-center justify-center border border-white/20 text-paper transition hover:border-signal hover:text-signal"
-              aria-label="Ver siguientes habilidades"
-            >
-              <IconArrowRight className="h-5 w-5" />
-            </button>
-          </div>
-        </div>
+        <SectionHeading
+          id="habilidades-titulo"
+          index="02"
+          eyebrow="Habilidades"
+          tone="dark"
+          title="Stack de trabajo"
+          description="Frontend, backend, datos, nube y la forma de trabajo con la que llevo un sistema de la idea al despliegue."
+        />
 
         <ul className="mt-8 flex flex-wrap gap-2" aria-label="Categorías">
           {skillCategories.map((category) => (
@@ -94,17 +74,35 @@ export function Skills() {
           ))}
         </ul>
 
-        <ul
-          ref={scroller}
-          className="scrollbar-none mt-8 flex snap-x snap-mandatory gap-4 overflow-x-auto pb-2"
-          aria-label="Habilidades técnicas"
-        >
-          {skills.map((skill) => (
-            <li key={skill.name} className="snap-start">
-              <SkillCard name={skill.name} category={skill.category} reduce={reduce === true} />
-            </li>
-          ))}
-        </ul>
+        <div className="mt-8 flex items-center gap-2 sm:gap-3">
+          <button
+            type="button"
+            onClick={() => move(-1)}
+            className="inline-flex h-11 w-11 shrink-0 items-center justify-center border border-white/20 text-paper transition hover:border-signal hover:text-signal sm:h-12 sm:w-12"
+            aria-label="Ver habilidades anteriores"
+          >
+            <IconArrowLeft className="h-5 w-5" />
+          </button>
+          <ul
+            ref={scroller}
+            className="scrollbar-none flex min-w-0 flex-1 snap-x snap-mandatory gap-4 overflow-x-auto pb-2"
+            aria-label="Habilidades técnicas"
+          >
+            {skills.map((skill) => (
+              <li key={skill.name} className="snap-start">
+                <SkillCard name={skill.name} category={skill.category} reduce={reduce === true} />
+              </li>
+            ))}
+          </ul>
+          <button
+            type="button"
+            onClick={() => move(1)}
+            className="inline-flex h-11 w-11 shrink-0 items-center justify-center border border-white/20 text-paper transition hover:border-signal hover:text-signal sm:h-12 sm:w-12"
+            aria-label="Ver siguientes habilidades"
+          >
+            <IconArrowRight className="h-5 w-5" />
+          </button>
+        </div>
       </div>
     </section>
   );
